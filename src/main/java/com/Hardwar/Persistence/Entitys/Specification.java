@@ -37,4 +37,12 @@ public class Specification {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "Specification{" +
+                "value='" + value + '\'' +
+                ", key='" + key +
+                '}';
+    }
 }

@@ -91,4 +91,18 @@ public class Product {
     public void setTypeOfHardWare(String typeOfHardWare) {
         this.typeOfHardWare = typeOfHardWare;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", domainName='" + domainName + '\'' +
+                ", typeOfHardWare='" + typeOfHardWare + '\'' +
+                ", articleNumber='" + articleNumber + '\'' +
+                ", specification=" + specification +
+                '}';
+    }
 }
