@@ -20,10 +20,14 @@ public class ProductResource {
         return service.findAll();
     }
 
-    @GetMapping(path = "/{domainName}")
+    @GetMapping(path = "/{domainName}/{hardWareType}")
     public @ResponseBody
-    List<Product> getAllbyDomainName(@PathVariable("domainName") String domainName){
-        return service.findAllByDomainName(domainName);
+    List<Product> getAllbyDomainNameAndType(@PathVariable("domainName") String domainName,@PathVariable("hardWareType") String hardWareType){
+        return service.findAllByDomainNameAndType(domainName,hardWareType);
+    }
+    @GetMapping(path = "/{domainName}")
+    public @ResponseBody List<Product> getAllByDomainName(@PathVariable("domainName")String domainName){
+        return service.findAllByDomain(domainName);
     }
 
     @PostMapping

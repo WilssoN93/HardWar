@@ -3,7 +3,7 @@ package com.Hardwar.Persistence.Entitys;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "specification")
+@Table(name = "`specification`")
 public class Specification {
 
     String value;
@@ -16,12 +16,12 @@ public class Specification {
         return id;
     }
 
-    @Column(name = "key")
+    @Column(name = "`key`")
     public String getKey() {
         return key;
     }
 
-    @Column(name = "value")
+    @Column(name = "`value`")
     public String getValue() {
         return value;
     }

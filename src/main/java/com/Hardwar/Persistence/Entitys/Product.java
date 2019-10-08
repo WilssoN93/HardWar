@@ -5,17 +5,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "`product`")
 public class Product {
 
     private Long id;
     private String url;
-    private String name;
-    private String price;
     private String domainName;
     private String typeOfHardWare;
-    private String articleNumber;
-    private List<Specification> specification;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,25 +24,6 @@ public class Product {
         this.id = id;
     }
 
-    @Column(name = "articlenumber")
-    public String getArticleNumber() {
-        return articleNumber;
-    }
-
-    public void setArticleNumber(String articleNumber) {
-        this.articleNumber = articleNumber;
-    }
-
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "product_specification")
-    public List<Specification> getSpecification() {
-        return specification;
-    }
-
-    public void setSpecification(List<Specification> specification) {
-        this.specification = specification;
-    }
 
     @Column(name = "url")
     public String getUrl() {
@@ -54,24 +32,6 @@ public class Product {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Column(name = "price")
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     @Column(name = "domainname")
@@ -97,12 +57,8 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
-                ", name='" + name + '\'' +
-                ", price='" + price + '\'' +
                 ", domainName='" + domainName + '\'' +
                 ", typeOfHardWare='" + typeOfHardWare + '\'' +
-                ", articleNumber='" + articleNumber + '\'' +
-                ", specification=" + specification +
                 '}';
     }
 }
