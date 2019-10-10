@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a8f74069-239e-42a5-82e9-7a90874b1529" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/builder/builder.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/builder/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Client.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Scrapers/IntelCOM.java" afterDir="false" />
+      <change afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Entity/Product.java" afterDir="false" />
+      <change afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Resource/ProductResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hardwar.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Entitys/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Runner/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Runner/Runner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Scraper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Scraper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Scrapers/InetSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Scrapers/InetSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Scrapers/KomplettSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Scrapers/KomplettSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Hardwar/Utils/WebExport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Hardwar/Utils/WebExport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Entitys/Product.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Runner/Runner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Runner/Runner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Scraper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Scraper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Scrapers/InetSE.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Scrapers/InetSE.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Scrapers/KomplettSE.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Scrapers/KomplettSE.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Utils/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Utils/Utils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Hardwar/Utils/WebExport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Hardwar/Utils/WebExport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Persistence" beforeDir="false" afterPath="$PROJECT_DIR$/../Persistence" afterDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/pom.xml" beforeDir="false" afterPath="$USER_HOME$/Purrsistence/Purrsistence/pom.xml" afterDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/App/Score.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/App/ScoreRepository.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/App/ScoreResource.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/App/ScoreService.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/DemoApplication.java" beforeDir="false" afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/DemoApplication.java" afterDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Entity/Person.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Repository/PersonRepository.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Repository/ProductRepository.java" beforeDir="false" afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Repository/ProductRepository.java" afterDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Resource/PersonResource.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Service/PersonService.java" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Service/ProductService.java" beforeDir="false" afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/java/com/example/purrsistence/Service/ProductService.java" afterDir="false" />
+      <change beforePath="$USER_HOME$/Purrsistence/Purrsistence/src/main/resources/application.properties" beforeDir="false" afterPath="$USER_HOME$/Purrsistence/Purrsistence/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="11" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1RVIwNpkZstqrbQPt543wozpb1Y" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15332031" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.DemoApplication (1)">
+    <configuration name="Builder" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Builder.Builder" />
+      <module name="builder" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Builder.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.example.purrsistence.DemoApplication" />
+      <module name="purrsistence" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.purrsistence.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value=".purrsistence.DemoApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.purrsistence.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Runner" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Hardwar.Runner.Runner" />
+      <module name="Hardwar" />
+      <option name="PROGRAM_PARAMETERS" value="C:\Users\Daniels\HardWar\chromedriver.exe scan inet.se" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="purrsistence" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.purrsistence.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.purrsistence.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="persistence" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.purrsistence.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Runner" />
+      <item itemvalue="Application.DemoApplication" />
+      <item itemvalue="Application.DemoApplication (1)" />
+      <item itemvalue="Application.Builder" />
+      <item itemvalue="Spring Boot.DemoApplication" />
+      <item itemvalue="Spring Boot.DemoApplication (1)" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DemoApplication (1)" />
+        <item itemvalue="Application.Builder" />
+        <item itemvalue="Spring Boot.DemoApplication (1)" />
+        <item itemvalue="Application.DemoApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
+  <component name="SpringBeansView">
+    <option name="beanDetailsProportion" value="0.3" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a8f74069-239e-42a5-82e9-7a90874b1529" name="Default Changelist" comment="" />
+      <created>1569746073856</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1569746073856</updated>
+      <workItem from="1569746076617" duration="1549000" />
+      <workItem from="1569747711535" duration="4164000" />
+      <workItem from="1569865187954" duration="17515000" />
+      <workItem from="1569959419258" duration="17000" />
+      <workItem from="1570653369254" duration="13000" />
+      <workItem from="1570653399731" duration="74000" />
+      <workItem from="1570724179537" duration="730000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
