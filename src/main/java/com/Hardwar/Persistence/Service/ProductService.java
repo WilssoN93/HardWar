@@ -22,6 +22,9 @@ public class ProductService {
     public List<Product> findAll() {
         return repository.findAll();
     }
+    public List<Product> findAllByHardwareIsNullandDomain(String domainName) {
+        return repository.findAllByTypeOfHardWareIsNullAndDomainName(domainName);
+    }
 
     public List<Product> findAllByDomain(String domainName){
         return repository.findAllByDomainName(domainName);

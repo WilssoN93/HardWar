@@ -30,6 +30,11 @@ public class ProductResource {
         return service.findAllByDomain(domainName);
     }
 
+    @GetMapping(path = "{domainName}/nullvalues")
+    public @ResponseBody List<Product> getNullTypes(@PathVariable("domainName")String domainName){
+        return service.findAllByHardwareIsNullandDomain(domainName);
+    }
+
     @PostMapping
     public List<Product> saveAll(@RequestBody List<Product> productList){
         return service.addAllProducts(productList);
