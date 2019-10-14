@@ -26,9 +26,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Client {
+    HttpResponse response;
+    String json;
+    StringEntity entity;
+    HttpPut put;
     String apiHost;
     Gson gson = new Gson();
+    HttpGet get;
+    CloseableHttpResponse response;
     CloseableHttpClient client;
+    HttpPost post;
     private final String PRODUCT_ENDPOINT = "/product/";
     private final String GRAPHICSCARD_ENDPOINT = "/graphicscard/";
     private final String CPU_ENDPOINT = "/cpu/";
@@ -42,7 +49,7 @@ public class Client {
         client = HttpClients.createDefault();
         List<Product> allProductsByDomainNameAndType = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName + "/" + hardWareType);
+            get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName + "/" + hardWareType);
             System.out.println("Executing " + get.getRequestLine());
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 @Override
@@ -50,7 +57,7 @@ public class Client {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
-                        String json = EntityUtils.toString(entity);
+                         json = EntityUtils.toString(entity);
                         return json;
                     } else {
                         throw new ClientProtocolException("Unexpected response status: " + statusCode);
@@ -73,7 +80,7 @@ public class Client {
         client = HttpClients.createDefault();
         List<Product> allProductsByDomain = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName);
+            get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName);
             System.out.println("Executing " + get.getRequestLine());
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 @Override
@@ -81,7 +88,7 @@ public class Client {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
-                        String json = EntityUtils.toString(entity);
+                         json = EntityUtils.toString(entity);
                         return json;
                     } else {
                         throw new ClientProtocolException("Unexpected response status: " + statusCode);
@@ -104,7 +111,7 @@ public class Client {
         client = HttpClients.createDefault();
         List<GraphicsCard> allGraphicsCardsByDomain = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + GRAPHICSCARD_ENDPOINT + domainName);
+            get = new HttpGet(apiHost + GRAPHICSCARD_ENDPOINT + domainName);
             System.out.println("Executing " + get.getRequestLine());
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 @Override
@@ -112,7 +119,7 @@ public class Client {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
-                        String json = EntityUtils.toString(entity);
+                         json = EntityUtils.toString(entity);
                         return json;
                     } else {
                         throw new ClientProtocolException("Unexpected response status: " + statusCode);
@@ -132,10 +139,10 @@ public class Client {
 
     public List<Product> getAllNullAndDomain(String domainName) {
 
-        CloseableHttpClient client = HttpClients.createDefault();
+        client = HttpClients.createDefault();
         List<Product> allNullValues = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName + "/nullvalues");
+            get = new HttpGet(apiHost + PRODUCT_ENDPOINT + domainName + "/nullvalues");
             System.out.println("Executing " + get.getRequestLine());
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
@@ -146,7 +153,7 @@ public class Client {
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
 
-                        String json = EntityUtils.toString(entity);
+                         json = EntityUtils.toString(entity);
 
                         return json;
                     } else {
@@ -167,10 +174,10 @@ public class Client {
 
     public List<GraphicsCard> getAllGraphicsCards() {
 
-        CloseableHttpClient client = HttpClients.createDefault();
+        client = HttpClients.createDefault();
         List<GraphicsCard> allGraphicCards = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + GRAPHICSCARD_ENDPOINT);
+            get = new HttpGet(apiHost + GRAPHICSCARD_ENDPOINT);
             System.out.println("Executing " + get.getRequestLine());
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
@@ -181,7 +188,7 @@ public class Client {
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
 
-                        String json = EntityUtils.toString(entity);
+                         json = EntityUtils.toString(entity);
 
                         return json;
                     } else {
@@ -201,11 +208,7 @@ public class Client {
     }
 
     public List<Product> saveProducts(List<Product> product) {
-        CloseableHttpResponse response;
-        CloseableHttpClient client;
-        HttpPost post;
-        String json;
-        StringEntity entity;
+
         try {
             client = HttpClients.createDefault();
             post = new HttpPost(apiHost + PRODUCT_ENDPOINT);
@@ -227,11 +230,6 @@ public class Client {
     }
 
     public List<GraphicsCard> saveGraphicsCard(List<GraphicsCard> graphicsCards) {
-        CloseableHttpResponse response;
-        CloseableHttpClient client;
-        HttpPost post;
-        String json;
-        StringEntity entity;
         try {
             client = HttpClients.createDefault();
             post = new HttpPost(apiHost + GRAPHICSCARD_ENDPOINT);
@@ -253,10 +251,6 @@ public class Client {
     }
 
     public List<GraphicsCard> updateGraphicsCard(List<GraphicsCard> listToBeUpdated) {
-        HttpResponse response;
-        String json;
-        StringEntity entity;
-        CloseableHttpClient client;
         Type listType = new TypeToken<List<GraphicsCard>>() {}.getType();
         try {
             client = HttpClients.createDefault();
@@ -280,10 +274,7 @@ public class Client {
     }
 
     public List<Product> updateProductTypes(List<Product> listToBeUpdated) {
-        HttpResponse response;
-        String json;
-        StringEntity entity;
-        CloseableHttpClient client;
+
         Type listType = new TypeToken<List<Product>>() {}.getType();
         try {
             client = HttpClients.createDefault();
@@ -307,14 +298,10 @@ public class Client {
     }
 
     public List<CentralProcessingUnit> updateCPUs(List<CentralProcessingUnit> listToBeUpdated) {
-        HttpResponse response;
-        String json;
-        StringEntity entity;
-        CloseableHttpClient client;
         Type listType = new TypeToken<List<CentralProcessingUnit>>() {}.getType();
         try {
             client = HttpClients.createDefault();
-            HttpPut put = new HttpPut(apiHost + CPU_ENDPOINT);
+            put = new HttpPut(apiHost + CPU_ENDPOINT);
             System.out.println("Executing " + put.getRequestLine());
             put.addHeader("Content-Type", "application/json");
             put.addHeader("Accept", "application/json;charset=UTF-8");
@@ -335,10 +322,10 @@ public class Client {
 
     public List<CentralProcessingUnit> getAllCPUs() {
 
-        CloseableHttpClient client = HttpClients.createDefault();
+       client = HttpClients.createDefault();
         List<CentralProcessingUnit> allCPUs = new ArrayList<>();
         try {
-            HttpGet get = new HttpGet(apiHost + CPU_ENDPOINT);
+            get = new HttpGet(apiHost + CPU_ENDPOINT);
             System.out.println("Executing " + get.getRequestLine());
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
@@ -349,7 +336,7 @@ public class Client {
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
 
-                        String json = EntityUtils.toString(entity);
+                        json = EntityUtils.toString(entity);
 
                         return json;
                     } else {

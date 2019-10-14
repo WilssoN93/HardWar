@@ -14,7 +14,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -25,6 +25,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Persistence" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:3.141.59" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-api:3.141.59" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:3.141.59" level="project" />
@@ -38,7 +39,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.11.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.14.0" level="project" />
-    <orderEntry type="module" module-name="entity" />
+    <orderEntry type="library" name="Maven: Hardwar:entity:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.11" level="project" />
