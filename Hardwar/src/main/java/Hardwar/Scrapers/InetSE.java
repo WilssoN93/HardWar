@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,13 +54,13 @@ public class InetSE extends Scraper {
         CentralProcessingUnit cpu = new CentralProcessingUnit();
         cpu.setUrl(product.getUrl());
         cpu.setDomain(getDomainName());
-        cpu.setCores(findFieldFromSpecification("Antal kärnor").replaceAll("\\D",""));
+        cpu.setCores(findFieldFromSpecification("Antal kärnor").replaceAll("\\D", ""));
         cpu.setThreads(findFieldFromSpecification("Antal trådar"));
         cpu.setSocket(findFieldFromSpecification("Processorsocket"));
         cpu.setArticleNumber(findFieldFromSpecification("Tillverkarens ArtNr"));
         cpu.setName(getText("//section[@class='box box-body product-description']//h1", "name"));
         cpu.setImgUrl(getTextWithAttribute("//div[@class='slide'][2]/picture[@class='image-slide']/div/img", "src", "image url"));
-        cpu.setPrice(getText("//div[@class='box-body']/span[@class='price']", "price").replaceAll("\\D",""));
+        cpu.setPrice(getText("//div[@class='box-body']/span[@class='price']", "price").replaceAll("\\D", ""));
         cpu = getCpuClockSpeeds(findFieldFromSpecification("Hastighet"), cpu);
         System.out.println(cpu);
         return cpu;
@@ -71,7 +72,22 @@ public class InetSE extends Scraper {
     }
 
     @Override
-    public RandomAcessMemory parseRAM(Product product) {
+    public RandomAccessMemory parseRAM(Product product) {
+        return null;
+    }
+
+    @Override
+    public Chassi parseChassi(Product product) {
+        return null;
+    }
+
+    @Override
+    public Storage parseStorage(Product product) {
+        return null;
+    }
+
+    @Override
+    public PowerSupplyUnit parsePSU(Product product) {
         return null;
     }
 
@@ -89,30 +105,57 @@ public class InetSE extends Scraper {
         Utils.waitTime((int) (Math.random() * 5000) + 1000);
         GraphicsCard graphicsCard = new GraphicsCard();
         getWebPage(product.getUrl());
+        System.out.println(product.getUrl());
+        String boostClock = findFieldFromSpecification("Turbofrekvens");
+        String coreclock = findFieldFromSpecification("GPU-frekvens");
         graphicsCard.setArticleNumber(findFieldFromSpecification("Tillverkarens ArtNr"));
         graphicsCard.setUrl(product.getUrl());
         graphicsCard.setName(getText("//section[@class='box box-body product-description']/header/h1", "name"));
-        graphicsCard.setPrice(getText("//div[@class='box-body']/span[@class='price']", "price").replaceAll("\\D",""));
+        graphicsCard.setPrice(clearStringFromLetters(getText("//div[@class='box-body']/span[@class='price']", "price")));
         if (graphicsCard.getPrice() == null) {
-            graphicsCard.setPrice(getText("//section[@class='box product-purchase']//span[@class='campaign-price']", "discounted price").replaceAll("\\D",""));
-            graphicsCard.setOriginalPrice(getText("//section[@class='box product-purchase']//span[@class='list-price']", "original price").replaceAll("\\D",""));
+            graphicsCard.setPrice(getText("//section[@class='box product-purchase']//span[@class='campaign-price']", "discounted price").replaceAll("\\D", ""));
+            graphicsCard.setOriginalPrice(getText("//section[@class='box product-purchase']//span[@class='list-price']", "original price").replaceAll("\\D", ""));
         }
 
         graphicsCard.setDomainName(getDomainName());
-        graphicsCard.setCudaCores(findFieldFromSpecification("Streamprocessorer / pipes").replaceAll("\\D",""));
-        graphicsCard.setImgUrl(getText("//div[@class='slide'][1]/picture[@class='image-slide']/div[@class='center-image']/img", "img url"));
-        graphicsCard.setCoreClock(findFieldFromSpecification("GPU-frekvens").replaceAll("\\D",""));
-        graphicsCard.setBoostClock(findFieldFromSpecification("Turbofrekvens").replaceAll("\\D",""));
-        graphicsCard.setConnection(findFieldFromSpecification("Strömanslutning"));
-        if (graphicsCard.getBoostClock() == null) {
-            if (graphicsCard.getCoreClock() != null) {
-                graphicsCard.setBoostClock(getBoostClock(graphicsCard.getCoreClock()));
-                graphicsCard.setCoreClock(removeBoostClockFromCoreClock(graphicsCard.getCoreClock()));
+        graphicsCard.setCudaCores(clearStringFromLetters(findFieldFromSpecification("Streamprocessorer / pipes")));
+        graphicsCard.setImgUrl(getText("//div[@class='slides']/div[1]//img", "img url"));
+       if(coreclock!=null) {
+           if (coreclock.contains("OC")) {
+               String[] splittedCoreClock = findFieldFromSpecification("GPU-frekvens").split(",");
+               graphicsCard.setCoreClock(clearStringFromLetters(splittedCoreClock[0]));
+           } else {
+               graphicsCard.setCoreClock(clearStringFromLetters(coreclock));
+           }
+       }
+        if (boostClock != null) {
+            if (boostClock.contains("OC")) {
+                String[] splittedBoostClock = findFieldFromSpecification("Turbofrekvens").split(",");
+                graphicsCard.setBoostClock(clearStringFromLetters(splittedBoostClock[0]));
+            } else {
+                graphicsCard.setBoostClock(clearStringFromLetters(boostClock));
             }
+        }
+        graphicsCard.setConnection(findFieldFromSpecification("Strömanslutning"));
+
+        if (graphicsCard.getBoostClock()==null){
+          graphicsCard = getBoost(graphicsCard);
         }
 
         System.out.println(graphicsCard);
         return graphicsCard;
+    }
+
+    private GraphicsCard getBoost(GraphicsCard gpu){
+       String coreClock = findFieldFromSpecification("GPU-frekvens");
+       if (coreClock != null) {
+           String[] clockSpeeds = coreClock.split("[,]");
+           if (clockSpeeds.length >= 2) {
+               gpu.setCoreClock(clearStringFromLetters(clockSpeeds[0]));
+               gpu.setBoostClock(clearStringFromLetters(clockSpeeds[1]));
+           }
+       }
+       return gpu;
     }
 
     @Override
@@ -140,15 +183,6 @@ public class InetSE extends Scraper {
             return null;
         }
         return element;
-    }
-
-    private String getArtNumberFromSpecifications(List<Specification> specificationList) {
-        for (Specification spec : specificationList) {
-            if (spec.getKey().equals("Tillverkarens ArtNr")) {
-                return spec.getValue();
-            }
-        }
-        return null;
     }
 
     private String findFieldFromSpecification(String field) {
@@ -191,8 +225,8 @@ public class InetSE extends Scraper {
             List<Double> matchedSpeed = new ArrayList<>();
             for (String clockspeeds : speed) {
                 if (clockspeeds.matches("[0-9][,.][0-9]")) {
-                    matchedSpeed.add(Double.parseDouble(clockspeeds.replace(",",".")));
-                }else if(clockspeeds.matches("[0-9]")){
+                    matchedSpeed.add(Double.parseDouble(clockspeeds.replace(",", ".")));
+                } else if (clockspeeds.matches("[0-9]")) {
                     matchedSpeed.add(Double.parseDouble(clockspeeds));
                 }
             }
@@ -211,6 +245,13 @@ public class InetSE extends Scraper {
             }
         }
         return cpu;
+    }
+
+    public String clearStringFromLetters(String string){
+        if(string != null){
+            return string.replaceAll("\\D","");
+        }
+        return string;
     }
 
 }

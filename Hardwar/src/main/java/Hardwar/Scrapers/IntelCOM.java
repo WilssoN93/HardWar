@@ -66,7 +66,22 @@ public class IntelCOM extends Scraper {
     }
 
     @Override
-    public RandomAcessMemory parseRAM(Product product) {
+    public RandomAccessMemory parseRAM(Product product) {
+        return null;
+    }
+
+    @Override
+    public Chassi parseChassi(Product product) {
+        return null;
+    }
+
+    @Override
+    public Storage parseStorage(Product product) {
+        return null;
+    }
+
+    @Override
+    public PowerSupplyUnit parsePSU(Product product) {
         return null;
     }
 
@@ -92,19 +107,5 @@ public class IntelCOM extends Scraper {
             }
         }
         return null;
-    }
-
-    private List<Specification> createSpecificationMap() {
-        List<Specification> specificationList = new ArrayList<>();
-        List<WebElement> elementList = getListOfElement("//div//div[@id='bladeInside']/ul[@class='specs-list']/li", "elements");
-
-        for (WebElement element : elementList) {
-            int index = elementList.indexOf(element);
-            Specification spec = new Specification();
-            spec.setValue(element.findElement(By.xpath("//div//div[@id='bladeInside']/ul[@class='specs-list']/li[" + index + "]/span[@class='value']")).getText());
-            spec.setKey(element.findElement(By.xpath("//div//div[@id='bladeInside']/ul[@class='specs-list']/li[" + index + "]/span[@class='label']")).getText());
-            specificationList.add(spec);
-        }
-        return specificationList;
     }
 }

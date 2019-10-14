@@ -12,7 +12,10 @@ public interface WebExport {
 
     CentralProcessingUnit parseCPU(Product product);
     MotherBoard parseMotherBoard(Product product);
-    RandomAcessMemory parseRAM(Product product);
+    RandomAccessMemory parseRAM(Product product);
+    Chassi parseChassi(Product product);
+    Storage parseStorage(Product product);
+    PowerSupplyUnit parsePSU(Product product);
     Product parseType(Product product);
 
 

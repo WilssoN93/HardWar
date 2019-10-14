@@ -41,9 +41,10 @@ public class KomplettSE extends Scraper {
         graphicsCard.setUrl(product.getUrl());
         graphicsCard.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
         graphicsCard.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
-        graphicsCard.setPrice(getText("//span[@class='product-price-now']", "price"));
-        graphicsCard.setBoostClock(findFieldFromSpecification("Snabbklocka"));
-        graphicsCard.setCudaCores(findFieldFromSpecification("cuda-kärnor"));
+        graphicsCard.setCoreClock(clearStringFromLetters(findFieldFromSpecification("Kärnklocka")));
+        graphicsCard.setPrice(clearStringFromLetters(getText("//span[@class='product-price-now']", "price")));
+        graphicsCard.setBoostClock(clearStringFromLetters(findFieldFromSpecification("Snabbklocka")));
+        graphicsCard.setCudaCores(clearStringFromLetters(findFieldFromSpecification("cuda-kärnor")));
         graphicsCard.setConnection(findFieldFromSpecification("Extra Krav"));
         graphicsCard.setImgUrl(getWebElement("//div/button[1]/img","img url").getAttribute("src"));
         System.out.println(graphicsCard);
@@ -61,7 +62,22 @@ public class KomplettSE extends Scraper {
     }
 
     @Override
-    public RandomAcessMemory parseRAM(Product product) {
+    public RandomAccessMemory parseRAM(Product product) {
+        return null;
+    }
+
+    @Override
+    public Chassi parseChassi(Product product) {
+        return null;
+    }
+
+    @Override
+    public Storage parseStorage(Product product) {
+        return null;
+    }
+
+    @Override
+    public PowerSupplyUnit parsePSU(Product product) {
         return null;
     }
 

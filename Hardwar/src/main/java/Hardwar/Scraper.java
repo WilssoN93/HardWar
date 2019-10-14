@@ -25,6 +25,13 @@ public abstract class Scraper implements WebExport {
 
     }
 
+    public String clearStringFromLetters(String string){
+        if(string != null){
+            return string.replaceAll("\\D","");
+        }
+        return string;
+    }
+
     private ChromeOptions getChromeOptionsConfiguration(){
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");

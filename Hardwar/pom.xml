@@ -14,21 +14,9 @@
             <version>3.141.59</version>
         </dependency>
         <dependency>
-            <groupId>Hardwar</groupId>
-            <artifactId>entity</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
-        </dependency>
-        <dependency>
-            <groupId>com.Hardwar</groupId>
-            <artifactId>Persistence</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -39,6 +27,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.Hardwar</groupId>
+            <artifactId>Persistence</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.Hardwar</groupId>
