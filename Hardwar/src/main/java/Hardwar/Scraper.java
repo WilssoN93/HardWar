@@ -35,7 +35,7 @@ public abstract class Scraper implements WebExport {
     private ChromeOptions getChromeOptionsConfiguration(){
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
-       // options.addArguments("--headless");
+        options.addArguments("--headless");
         options.addArguments("--start-maximized");
         return options;
 
@@ -52,6 +52,16 @@ public abstract class Scraper implements WebExport {
         String text = null;
         try {
             text = cleanWeirdCharacters(driver.findElementByXPath(xPath).getText());
+        }catch (NoSuchElementException e){
+            System.out.println("Failed to get " + field + " " + driver.getCurrentUrl());
+        }
+        return text;
+    }
+
+    public String getTextWithAttribute(String xPath,String attribute,String field){
+        String text = null;
+        try {
+            text = cleanWeirdCharacters(driver.findElementByXPath(xPath).getAttribute(attribute));
         }catch (NoSuchElementException e){
             System.out.println("Failed to get " + field + " " + driver.getCurrentUrl());
         }
@@ -113,6 +123,9 @@ public abstract class Scraper implements WebExport {
     }
     public String cleanString(String string){
         return string.replaceAll("\\W","");
+    }
+    public int removeAllCharactersFromNumbers(String numbers){
+        return Integer.parseInt(numbers.replaceAll("\\D",""));
     }
     public String cleanWeirdCharacters(String string){
         return string.replaceAll("[®™]","");

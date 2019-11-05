@@ -35,30 +35,159 @@ public class KomplettSE extends Scraper {
     @Override
     public GraphicsCard parseGraphicsCard(Product product) {
         GraphicsCard graphicsCard = new GraphicsCard();
-        Utils.waitTime((int)(Math.random()*5000)+1000);
-        getWebPage(product.getUrl());
-        graphicsCard.setDomainName(getDomainName());
-        graphicsCard.setUrl(product.getUrl());
-        graphicsCard.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
-        graphicsCard.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
-        graphicsCard.setCoreClock(clearStringFromLetters(findFieldFromSpecification("Kärnklocka")));
-        graphicsCard.setPrice(clearStringFromLetters(getText("//span[@class='product-price-now']", "price")));
-        graphicsCard.setBoostClock(clearStringFromLetters(findFieldFromSpecification("Snabbklocka")));
-        graphicsCard.setCudaCores(clearStringFromLetters(findFieldFromSpecification("cuda-kärnor")));
-        graphicsCard.setConnection(findFieldFromSpecification("Extra Krav"));
-        graphicsCard.setImgUrl(getWebElement("//div/button[1]/img","img url").getAttribute("src"));
-        System.out.println(graphicsCard);
+        try {
+            System.out.println(product.getUrl());
+            Utils.waitTime((int) (Math.random() * 5000) + 1000);
+            getWebPage(product.getUrl());
+            graphicsCard.setDomainName(getDomainName());
+            graphicsCard.setUrl(product.getUrl());
+            graphicsCard.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
+            graphicsCard.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
+            graphicsCard.setCoreClock(findCoreClockFromSpecification());
+            graphicsCard.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
+            try {
+
+                graphicsCard.setBoostClock(findBoostClockFromSpecification());
+            } catch (Exception e) {
+                System.out.println("Couldnt find boost clock!");
+            }
+            graphicsCard.setCudaCores(removeAllCharactersFromNumbers(findCudaCoresFromSpecification("cuda-kärnor")));
+            graphicsCard.setConnection(findFieldFromSpecification("Extra Krav"));
+            graphicsCard.setImgUrl(getWebElement("//div/button[1]/img", "img url").getAttribute("src"));
+            graphicsCard.setCapacity(removeAllCharactersFromNumbers(findFieldFromSpecification("Erforderligt nätaggregat")));
+            System.out.println(graphicsCard.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return graphicsCard;
     }
 
     @Override
     public CentralProcessingUnit parseCPU(Product product) {
-        return null;
+        CentralProcessingUnit cpu = new CentralProcessingUnit();
+        try {
+            System.out.println(product.getUrl());
+            Utils.waitTime((int) (Math.random() * 5000) + 1000);
+            getWebPage(product.getUrl());
+            cpu.setUrl(product.getUrl());
+            try {
+                cpu.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            cpu.setDomain(getDomainName());
+            try {
+                cpu.setCores(getCpuCores(findFieldFromSpecification("Antal kärnor")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setThreads(removeAllCharactersFromNumbers(findFieldFromSpecification("Antal trådar")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setCoreClock(getCpuSpeeds(findFieldFromSpecification("Klockfrekvens")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setBoostClock(getCpuSpeeds(findFieldFromSpecification("Max. turbohastighet")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setSocket(getCpuSocket(findFieldFromSpecification("Kompatibel processorsockel")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                cpu.setImgUrl(getTextWithAttribute("//*[@id=\"MainContent\"]//button/img", "src", "image url"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println(cpu.toString());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cpu;
     }
 
     @Override
     public MotherBoard parseMotherBoard(Product product) {
-        return null;
+        MotherBoard motherBoard = new MotherBoard();
+        try {
+            System.out.println(product.getUrl());
+            Utils.waitTime((int) (Math.random() * 5000) + 1000);
+            getWebPage(product.getUrl());
+            motherBoard.setUrl(product.getUrl());
+            try {
+                motherBoard.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            motherBoard.setDomainName(getDomainName());
+            try {
+                motherBoard.setSupportedRam(findFieldFromSpecification("Teknik"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setSocket(getCpuSocket(findFieldFromSpecification("Processor-socket")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setSpeeds(getMaxSpeed(findFieldFromSpecification("Bussklocka")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setFormFactor(getFormFactor(findFieldFromSpecification("Typ av produkt")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setImgUrl(getTextWithAttribute("//*[@id=\"MainContent\"]//button/img", "src", "image url"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                motherBoard.setMdot2(getMdot2(findFieldFromSpecification("Lagringsgränssnitt")));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(motherBoard.toString());
+
+        return motherBoard;
     }
 
     @Override
@@ -83,7 +212,7 @@ public class KomplettSE extends Scraper {
 
     @Override
     public Product parseType(Product product) {
-        Utils.waitTime((int)(Math.random()*5000)+1000);
+        Utils.waitTime((int) (Math.random() * 5000) + 1000);
         getWebPage(product.getUrl());
         System.out.println(driver.getCurrentUrl());
         driver.switchTo().activeElement().click();
@@ -99,20 +228,144 @@ public class KomplettSE extends Scraper {
         return product;
     }
 
+    private String getFormFactor(String formFactorText) {
+        String[] formfactor = formFactorText.split("-");
+        if (formfactor.length == 2) {
+            if (formfactor[1].contains("utökad")){
+                return formfactor[1].replaceAll("utökad","").trim();
+            }else if(formfactor[1].contains("micro ATX")){
+                return "mATX";
+            }else if (formfactor[1].contains("mini ITX")){
+                return "Mini-ITX";
+            }else {
+                return formfactor[1].trim();
+            }
+        }
+        return null;
+    }
+
+    private int getMaxSpeed(String allSpeeds) {
+        String[] speeds = allSpeeds.split(",");
+        int highestSpeed = 0;
+        for (String speed : speeds) {
+            if (removeAllCharactersFromNumbers(speed) > highestSpeed) {
+                highestSpeed = removeAllCharactersFromNumbers(speed);
+            }
+        }
+        return highestSpeed;
+    }
+
     @Override
     public String getDomainName() {
         return "komplett.se";
     }
 
     private String findFieldFromSpecification(String field) {
-        List<String> headerList = getListOfText("//tbody/tr/th","specification headers");
-        List<String> valueList = getListOfText("//tbody/tr/td","specification values");
-        for (int i = 0; i < headerList.size() ; i++) {
-            if(headerList.get(i).toLowerCase().equals(field.toLowerCase())){
+        List<String> headerList = getListOfText("//tbody/tr/th", "specification headers");
+        List<String> valueList = getListOfText("//tbody/tr/td", "specification values");
+        for (int i = 0; i < headerList.size(); i++) {
+            if (headerList.get(i).toLowerCase().equals(field.toLowerCase())) {
                 return valueList.get(i);
             }
         }
         return null;
     }
 
+    private String findCudaCoresFromSpecification(String field) {
+        List<String> headerList = getListOfText("//tbody/tr/th", "specification headers");
+        List<String> valueList = getListOfText("//tbody/tr/td", "specification values");
+        for (int i = 0; i < headerList.size(); i++) {
+            if (headerList.get(i).equals("Strömprocessorer")) {
+                return valueList.get(i);
+            } else if (headerList.get(i).equals("CUDA-kärnor")) {
+                return valueList.get(i);
+            }
+        }
+        return "0";
+    }
+
+    private int findCoreClockFromSpecification() {
+        List<String> headerList = getListOfText("//tbody/tr/th", "specification headers");
+        List<String> valueList = getListOfText("//tbody/tr/td", "specification values");
+        if (headerList.contains("Kärnklocka")) {
+            for (int i = 0; i < headerList.size(); i++) {
+                if (headerList.get(i).equals("Kärnklocka")) {
+                    return removeAllCharactersFromNumbers(valueList.get(i));
+                }
+            }
+        } else {
+            String info = getText("//h2[@class='product-main-info-webtext2']/span", "info");
+            String[] diffrentInfo = info.split(",");
+            for (String strings : diffrentInfo) {
+                if (strings.contains("/")) {
+                    diffrentInfo = strings.split("/");
+                    if (diffrentInfo.length == 2) {
+                        return removeAllCharactersFromNumbers(diffrentInfo[0]);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private int findBoostClockFromSpecification() {
+        List<String> headerList = getListOfText("//tbody/tr/th", "specification headers");
+        List<String> valueList = getListOfText("//tbody/tr/td", "specification values");
+        if (headerList.contains("Snabbclocka")) {
+            for (int i = 0; i < headerList.size(); i++) {
+                if (headerList.get(i).equals("Snabbclocka")) {
+                    return removeAllCharactersFromNumbers(valueList.get(i));
+                }
+            }
+        } else {
+            String info = getText("//h2[@class='product-main-info-webtext2']/span", "info");
+            String[] diffrentInfo = info.split(",");
+            for (String strings : diffrentInfo) {
+                if (strings.contains("/")) {
+                    diffrentInfo = strings.split("/");
+                    if (diffrentInfo.length == 2) {
+                        return removeAllCharactersFromNumbers(diffrentInfo[1]);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    private String getCpuSpeeds(String speed) {
+        return speed.replaceAll("[A-Za-z]*", "").trim();
+    }
+
+    private String getCpuSocket(String socket) {
+        if (socket.contains("LGA")) {
+            socket = socket.replaceAll("LGA", "");
+        }
+        return socket.replaceAll("Socket", "").trim();
+    }
+
+    private int getMdot2(String lagring){
+
+        if(lagring.contains("x M.2")){
+            System.out.println(lagring.indexOf("x M.2"));
+            String Mdot2 = lagring.substring(lagring.indexOf("x M.2")-2,lagring.indexOf("x M.2"));
+            System.out.println(Mdot2);
+            return Integer.parseInt(Mdot2.trim());
+        }
+        return 0;
+    }
+
+    private int getCpuCores(String cores) {
+        int nrCores = 0;
+
+        if (cores.equals("Dubbelkärnig")) {
+            nrCores = 2;
+        } else if (cores.equals("Fyrkärnig")) {
+            nrCores = 4;
+        } else if (cores.equals("Sexkärnig")) {
+            nrCores = 6;
+        } else {
+            nrCores = removeAllCharactersFromNumbers(cores);
+        }
+        return nrCores;
+    }
 }

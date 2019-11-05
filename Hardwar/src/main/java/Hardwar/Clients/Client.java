@@ -43,8 +43,11 @@ public class Client {
 
         client = HttpClients.createDefault();
         List<Product> allProductsByDomainNameAndType = new ArrayList<>();
+
         try {
             get = new HttpGet(apiHost + "/" + endpoint + "/" + domainName + "/" + hardWareType);
+            get.addHeader("Content-Type", "application/json");
+            get.addHeader("Accept", "application/json;charset=UTF-8");
             System.out.println("Executing " + get.getRequestLine());
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 @Override
@@ -117,6 +120,7 @@ public class Client {
                     int statusCode = httpResponse.getStatusLine().getStatusCode();
                     if (statusCode >= 200 && statusCode < 300) {
                         HttpEntity entity = httpResponse.getEntity();
+
 
                          json = EntityUtils.toString(entity);
 

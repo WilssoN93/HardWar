@@ -15,14 +15,14 @@ public class Runner {
     private Client client;
     private String typeOfHardWare;
     private final int parseAmount = 5;
-    private final String GRAPHICSCARD_ENDPOINT = "/graphicscard/";
-    private final String PRODUCTS_ENDPOINT = "product/";
-    private final String CPU_ENDPOINT = "cpu/";
-    private final String MOTHERBOARD_ENDPOINT = "motherboard/";
-    private final String PSU_ENDPOINT = "psu/";
-    private final String RAM_ENDPOINT = "ram/";
-    private final String CHASSI_ENDPOINT = "chassi/";
-    private final String STORAGE_ENDPOINT = "storage/";
+    private final String GRAPHICSCARD_ENDPOINT = "/graphicscard";
+    private final String PRODUCTS_ENDPOINT = "/product";
+    private final String CPU_ENDPOINT = "/cpu";
+    private final String MOTHERBOARD_ENDPOINT = "/motherboards";
+    private final String PSU_ENDPOINT = "/psu";
+    private final String RAM_ENDPOINT = "/ram";
+    private final String CHASSI_ENDPOINT = "/chassi";
+    private final String STORAGE_ENDPOINT = "/storage";
 
 
     public Runner(String method, String domainName, String apiHost, Client client, String typeOfHardWare) {
@@ -93,7 +93,7 @@ public class Runner {
                         }
                         client.updateComponents(parsedChassis,CHASSI_ENDPOINT);
                         break;
-                    case "storage":
+                    case "disk":
                         List<Storage> parsedStorage = new ArrayList<>();
                         for (Product storage : products) {
                             if (parsedStorage.size() >= parseAmount) {
@@ -105,7 +105,7 @@ public class Runner {
                         }
                         client.updateComponents(parsedStorage,STORAGE_ENDPOINT);
                         break;
-                    case "ram":
+                    case "minne":
                         List<RandomAccessMemory> parsedRAM = new ArrayList<>();
                         for (Product RAM : products) {
                             if (parsedRAM.size() >= parseAmount) {
