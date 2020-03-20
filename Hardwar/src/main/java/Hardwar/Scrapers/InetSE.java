@@ -370,6 +370,12 @@ public class InetSE extends Scraper {
         } catch (Exception formFactor) {
             formFactor.printStackTrace();
         }
+
+        try {
+            psu.setCertPoints(getCertPoints(findFieldFromSpecification("80+ Certifiering")));
+        }catch (NullPointerException e){
+            System.out.println("didnt find certification!");
+        }
         try {
             if (findFieldFromSpecification("Modulärt").equals("Ja")) {
                 psu.setModular(true);
@@ -445,6 +451,21 @@ public class InetSE extends Scraper {
         return 0;
     }
 
+    private int getCertPoints(String cert){
+
+            if (cert.toLowerCase().contains("bronze")){
+                return 1;
+            }else if(cert.toLowerCase().contains("silver")){
+                return 2;
+            }else if(cert.toLowerCase().contains("gold")){
+                return 3;
+            }else if(cert.toLowerCase().contains("platinum")){
+                return 4;
+            }else if (cert.toLowerCase().contains("titanium")){
+                return 5;
+            }else return 0;
+    }
+
     private int setSSDSize() {
         String ssdSize = findSSDSizeFromSpecification();
         if (ssdSize.contains(",")) {
@@ -475,7 +496,6 @@ public class InetSE extends Scraper {
     @Override
     public Product parseType(Product product) {
         Utils.waitTime((int) (Math.random() * 5000) + 1000);
-        System.out.println((int) (Math.random() * 5000) + 1000);
         getWebPage(product.getUrl());
         product.setTypeOfHardWare(getText("//li[2]/a/span", "type of hardware"));
         return product;
@@ -486,7 +506,6 @@ public class InetSE extends Scraper {
         Utils.waitTime((int) (Math.random() * 5000) + 1000);
         GraphicsCard graphicsCard = new GraphicsCard();
         getWebPage(product.getUrl());
-        System.out.println(product.getUrl());
         String boostClock = null;
         try {
             boostClock = findFieldFromSpecification("Turbofrekvens");
@@ -626,7 +645,6 @@ public class InetSE extends Scraper {
                 String value = values.get(i);
                 if (value.contains("+")) {
                     value = value.replaceAll("[+]", " plus ");
-                    System.out.println(value);
                 }
                 return value;
             }

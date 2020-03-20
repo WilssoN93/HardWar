@@ -56,6 +56,7 @@ public class Runner {
         } else if ("parse".equals(method)) {
             System.out.println("Parse method is called on domain: " + domainName);
             List<Product> products = client.getAllByDomainNameAndType(domainName, typeOfHardWare, PRODUCTS_ENDPOINT);
+            List<Product> parsedProducts = new ArrayList<>();
             if (webExport != null) {
                 switch (typeOfHardWare) {
                     case "grafikkort":
@@ -67,6 +68,8 @@ public class Runner {
                             }
                             GraphicsCard gpu = webExport.parseGraphicsCard(graphicscard);
                             if (gpu != null) {
+                                graphicscard.setParsed(true);
+                                parsedProducts.add(graphicscard);
                                 parsedGraphicsCards.add(gpu);
                                 System.out.println(parsedGraphicsCards.size() + "/5 parsed!");
                             } else {
@@ -84,6 +87,8 @@ public class Runner {
                             }
                             CentralProcessingUnit cpu = webExport.parseCPU(processor);
                             if (cpu != null) {
+                                processor.setParsed(true);
+                                parsedProducts.add(processor);
                                 parsedCPUs.add(cpu);
                                 System.out.println(parsedCPUs.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -101,6 +106,8 @@ public class Runner {
                             }
                             Chassi parsedChassi = webExport.parseChassi(chassi);
                             if (parsedChassi != null) {
+                                chassi.setParsed(true);
+                                parsedProducts.add(chassi);
                                 parsedChassis.add(parsedChassi);
                                 System.out.println(parsedChassis.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -119,6 +126,8 @@ public class Runner {
                             }
                             Storage parsedStorageDevice = webExport.parseStorage(storage);
                             if (parsedStorageDevice != null) {
+                                storage.setParsed(true);
+                                parsedProducts.add(storage);
                                 parsedStorage.add(parsedStorageDevice);
                                 System.out.println(parsedStorage.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -136,6 +145,8 @@ public class Runner {
                             }
                             RandomAccessMemory randomAccessMemory = webExport.parseRAM(RAM);
                             if (randomAccessMemory != null) {
+                                RAM.setParsed(true);
+                                parsedProducts.add(RAM);
                                 parsedRAM.add(randomAccessMemory);
                                 System.out.println(parsedRAM.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -153,6 +164,8 @@ public class Runner {
                             }
                             PowerSupplyUnit powerSupplyUnit = webExport.parsePSU(PSU);
                             if (powerSupplyUnit != null) {
+                                PSU.setParsed(true);
+                                parsedProducts.add(PSU);
                                 parsedPSU.add(powerSupplyUnit);
                                 System.out.println(parsedPSU.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -170,6 +183,8 @@ public class Runner {
                             }
                             MotherBoard parsedMotherboard = webExport.parseMotherBoard(motherBoard);
                             if (parsedMotherboard != null) {
+                                motherBoard.setParsed(true);
+                                parsedProducts.add(motherBoard);
                                 parsedMotherBoards.add(parsedMotherboard);
                                 System.out.println(parsedMotherBoards.size() + "/" + parseAmount + " parsed!");
                             } else {
@@ -180,7 +195,7 @@ public class Runner {
                         break;
 
                 }
-
+                client.saveProducts(parsedProducts,PRODUCTS_ENDPOINT);
             }
         } else if ("type".equals(method)) {
             List<Product> allProductByDomain = client.getAllNullAndDomain(domainName, PRODUCTS_ENDPOINT);
@@ -312,7 +327,9 @@ public class Runner {
                             client.deleteComponent(component,CHASSI_ENDPOINT);
                             System.out.println(component.getName() + " Deleted! : URL: " + component.getUrl());
                         }
+
                     }
+
                 }
             }
         }

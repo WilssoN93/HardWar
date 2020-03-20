@@ -338,12 +338,11 @@ public class Client {
             json = gson.toJson(listToBeUpdated,component);
             entity = new StringEntity(json,"UTF-8");
             entity.setContentEncoding("UTF-8");
-            System.out.println(entity);
-            System.out.println(listToBeUpdated);
 
             put.setEntity(entity);
             response = client.execute(put);
             int statusCode = response.getStatusLine().getStatusCode();
+            System.out.println(statusCode);
         } catch (Exception e) {
             System.out.println("Error in the put request!");
             e.printStackTrace();
@@ -359,7 +358,9 @@ public class Client {
             get = new HttpGet(apiHost + endpoint + "/delete/" + product.getId());
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
-            client.execute(get);
+            System.out.println(get.getRequestLine());
+            HttpResponse response = client.execute(get);
+            System.out.println(response.getStatusLine());
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Error");
