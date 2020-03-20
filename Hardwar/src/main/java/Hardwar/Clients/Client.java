@@ -1,23 +1,20 @@
 package Hardwar.Clients;
 
 
-import com.Hardwar.Persistence.Entitys.ComputerComponent;
-import com.Hardwar.Persistence.Entitys.Product;
+import com.Hardwar.Persistence.Entitys.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -211,6 +208,125 @@ public class Client {
         }
         return components;
     }
+
+    public List<? extends ComputerComponent> getAllComponentsByDomainName(String domainName) {
+        Type component = new TypeToken<List<ComputerComponent>>(){}.getType();
+        List<ComputerComponent> allComponents = new ArrayList<>();
+        GraphicsCard[] graphicsCards = null;
+        CentralProcessingUnit[] cpus = null;
+        Chassi[] chassis = null;
+        PowerSupplyUnit[] psus = null;
+        MotherBoard[] motherBoards = null;
+        RandomAccessMemory[] ram = null;
+        Storage[] storages = null;
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/graphicscard/" + domainName );
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+             graphicsCards = gson.fromJson(json,GraphicsCard[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/storage/" + domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            storages = gson.fromJson(json,Storage[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/ram/" + domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            ram = gson.fromJson(json,RandomAccessMemory[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/cpu/" + domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            cpus = gson.fromJson(json,CentralProcessingUnit[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/motherboards/"+ domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            motherBoards = gson.fromJson(json,MotherBoard[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/psu/" + domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            psus = gson.fromJson(json,PowerSupplyUnit[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + "/chassi/" + domainName);
+            System.out.println("Executing " + get.getRequestLine());
+            response = client.execute(get);
+            HttpEntity httpEntity = response.getEntity();
+            json = EntityUtils.toString(httpEntity);
+            chassis = gson.fromJson(json,Chassi[].class);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the get request!");
+            e.printStackTrace();
+        }
+
+        allComponents.addAll(Arrays.asList(storages));
+        allComponents.addAll(Arrays.asList(graphicsCards));
+        allComponents.addAll(Arrays.asList(cpus));
+        allComponents.addAll(Arrays.asList(chassis));
+        allComponents.addAll(Arrays.asList(motherBoards));
+        allComponents.addAll(Arrays.asList(psus));
+        allComponents.addAll(Arrays.asList(ram));
+        return allComponents;
+    }
     public List<? extends ComputerComponent> updateComponents(List<? extends ComputerComponent> listToBeUpdated, String endpoint) {
         Type component = new TypeToken<List<ComputerComponent>>(){}.getType();
         try {
@@ -234,5 +350,32 @@ public class Client {
         }
 
         return listToBeUpdated;
+    }
+
+
+    public Product deleteProduct(Product product,String endpoint){
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + endpoint + "/delete/" + product.getId());
+            get.addHeader("Content-Type", "application/json");
+            get.addHeader("Accept", "application/json;charset=UTF-8");
+            client.execute(get);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return product;
+    }
+    public void deleteComponent(ComputerComponent component,String endpoint){
+        try {
+            client = HttpClients.createDefault();
+            get = new HttpGet(apiHost + endpoint + "/delete/" + component.getId());
+            get.addHeader("Content-Type", "application/json");
+            get.addHeader("Accept", "application/json;charset=UTF-8");
+            client.execute(get);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error");
+        }
     }
 }

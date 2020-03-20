@@ -90,6 +90,11 @@ public class IntelCOM extends Scraper {
         return null;
     }
 
+    @Override
+    public ComputerComponent updatePrice(ComputerComponent component) {
+        return null;
+    }
+
 
     @Override
     public String getDomainName() {

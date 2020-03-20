@@ -17,7 +17,7 @@ public interface WebExport {
     Storage parseStorage(Product product);
     PowerSupplyUnit parsePSU(Product product);
     Product parseType(Product product);
-
+    ComputerComponent updatePrice(ComputerComponent component);
 
     String getDomainName();
 }

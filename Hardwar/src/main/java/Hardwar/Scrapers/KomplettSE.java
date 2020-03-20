@@ -4,6 +4,8 @@ import Hardwar.Domain;
 import Hardwar.Scraper;
 import Hardwar.Utils.Utils;
 import com.Hardwar.Persistence.Entitys.*;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,29 +37,62 @@ public class KomplettSE extends Scraper {
     @Override
     public GraphicsCard parseGraphicsCard(Product product) {
         GraphicsCard graphicsCard = new GraphicsCard();
+        System.out.println(product.getUrl());
+        Utils.waitTime((int) (Math.random() * 5000) + 1000);
+        getWebPage(product.getUrl());
+        graphicsCard.setDomainName(getDomainName());
+        graphicsCard.setUrl(product.getUrl());
         try {
-            System.out.println(product.getUrl());
-            Utils.waitTime((int) (Math.random() * 5000) + 1000);
-            getWebPage(product.getUrl());
-            graphicsCard.setDomainName(getDomainName());
-            graphicsCard.setUrl(product.getUrl());
             graphicsCard.setName(getText("//h1[@class='product-main-info-webtext1']/span", "name"));
+        } catch (Exception name) {
+            name.printStackTrace();
+            return null;
+        }
+        try {
             graphicsCard.setArticleNumber(getText("//div[@class='product-main-info-partnumber-store']/span/span[@itemprop='mpn']", "Article Number"));
+        } catch (Exception artNumber) {
+            artNumber.printStackTrace();
+            return null;
+        }
+        try {
             graphicsCard.setCoreClock(findCoreClockFromSpecification());
+        } catch (Exception coreClock) {
+            coreClock.printStackTrace();
+            return null;
+        }
+        try {
             graphicsCard.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
-            try {
-
-                graphicsCard.setBoostClock(findBoostClockFromSpecification());
-            } catch (Exception e) {
-                System.out.println("Couldnt find boost clock!");
-            }
-            graphicsCard.setCudaCores(removeAllCharactersFromNumbers(findCudaCoresFromSpecification("cuda-kärnor")));
-            graphicsCard.setConnection(findFieldFromSpecification("Extra Krav"));
-            graphicsCard.setImgUrl(getWebElement("//div/button[1]/img", "img url").getAttribute("src"));
-            graphicsCard.setCapacity(removeAllCharactersFromNumbers(findFieldFromSpecification("Erforderligt nätaggregat")));
-            System.out.println(graphicsCard.toString());
+        } catch (Exception price) {
+            price.printStackTrace();
+            return null;
+        }
+        try {
+            graphicsCard.setBoostClock(findBoostClockFromSpecification());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldnt find boost clock!");
+        }
+        try {
+            graphicsCard.setCudaCores(removeAllCharactersFromNumbers(findCudaCoresFromSpecification("cuda-kärnor")));
+        } catch (Exception cudaCores) {
+            cudaCores.printStackTrace();
+            return null;
+        }
+        try {
+            graphicsCard.setConnection(findFieldFromSpecification("Extra Krav"));
+        } catch (Exception connection) {
+            connection.printStackTrace();
+            return null;
+        }
+        try {
+            graphicsCard.setImgUrl(getWebElement("//div/button[1]/img", "img url").getAttribute("src"));
+        } catch (Exception img) {
+            img.printStackTrace();
+        }
+        try {
+            graphicsCard.setCapacity(removeAllCharactersFromNumbers(findFieldFromSpecification("Erforderligt nätaggregat")));
+        } catch (Exception capacity) {
+            capacity.printStackTrace();
+            return null;
         }
         return graphicsCard;
     }
@@ -146,7 +181,7 @@ public class KomplettSE extends Scraper {
                 e.printStackTrace();
             }
             try {
-                motherBoard.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
+                motherBoard.setPrice(removeAllCharactersFromNumbers(getText("//div[@class='product-price ']/span[@class='product-price-now']", "price")));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -219,7 +254,7 @@ public class KomplettSE extends Scraper {
         Utils.waitTime(1000);
         List<String> categories = getListOfText("//div[@class='breadcrumb-item-wrapper']/a[@class='breadcrumb-item-link']", "categories");
         for (String category : categories) {
-            if (category.equals("Datorkomponenter")) {
+            if (category.equals("Datorkomponenter")||category.equals("Kringutrustning")||category.equals("Lagring")||category.equals("Datorer")) {
                 String typeOfHardWare = categories.get(categories.indexOf(category) + 1);
                 product.setTypeOfHardWare(typeOfHardWare);
                 System.out.println(typeOfHardWare);
@@ -228,16 +263,40 @@ public class KomplettSE extends Scraper {
         return product;
     }
 
+    @Override
+    public ComputerComponent updatePrice(ComputerComponent component) {
+
+        getWebPage(component.getUrl());
+
+        try {
+           String alertBox = driver.findElementByXPath("//div[@class='alert-content']/div").getText();
+            if (alertBox.contains("Den här produkten finns inte längre i vårt sortiment")){
+                return null;
+            }
+        }catch(Exception e){
+
+        }
+
+        try {
+            component.setPrice(removeAllCharactersFromNumbers(getText("//div[@class='product-price ']/span[@class='product-price-now']", "price")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
     private String getFormFactor(String formFactorText) {
         String[] formfactor = formFactorText.split("-");
         if (formfactor.length == 2) {
-            if (formfactor[1].contains("utökad")){
-                return formfactor[1].replaceAll("utökad","").trim();
-            }else if(formfactor[1].contains("micro ATX")){
+            if (formfactor[1].contains("utökad")) {
+                return formfactor[1].replaceAll("utökad", "").trim();
+            } else if (formfactor[1].contains("micro ATX")) {
                 return "mATX";
-            }else if (formfactor[1].contains("mini ITX")){
+            } else if (formfactor[1].contains("mini ITX")) {
                 return "Mini-ITX";
-            }else {
+            } else {
                 return formfactor[1].trim();
             }
         }
@@ -300,7 +359,7 @@ public class KomplettSE extends Scraper {
                 if (strings.contains("/")) {
                     diffrentInfo = strings.split("/");
                     if (diffrentInfo.length == 2) {
-                        return removeAllCharactersFromNumbers(diffrentInfo[0]);
+                        return removeAllCharactersFromNumbers(diffrentInfo[0].trim());
                     }
                 }
             }
@@ -311,9 +370,9 @@ public class KomplettSE extends Scraper {
     private int findBoostClockFromSpecification() {
         List<String> headerList = getListOfText("//tbody/tr/th", "specification headers");
         List<String> valueList = getListOfText("//tbody/tr/td", "specification values");
-        if (headerList.contains("Snabbclocka")) {
+        if (headerList.contains("Snabbklocka")) {
             for (int i = 0; i < headerList.size(); i++) {
-                if (headerList.get(i).equals("Snabbclocka")) {
+                if (headerList.get(i).equals("Snabbklocka")) {
                     return removeAllCharactersFromNumbers(valueList.get(i));
                 }
             }
@@ -324,7 +383,7 @@ public class KomplettSE extends Scraper {
                 if (strings.contains("/")) {
                     diffrentInfo = strings.split("/");
                     if (diffrentInfo.length == 2) {
-                        return removeAllCharactersFromNumbers(diffrentInfo[1]);
+                        return removeAllCharactersFromNumbers(diffrentInfo[1].trim());
                     }
                 }
             }
@@ -343,11 +402,11 @@ public class KomplettSE extends Scraper {
         return socket.replaceAll("Socket", "").trim();
     }
 
-    private int getMdot2(String lagring){
+    private int getMdot2(String lagring) {
 
-        if(lagring.contains("x M.2")){
+        if (lagring.contains("x M.2")) {
             System.out.println(lagring.indexOf("x M.2"));
-            String Mdot2 = lagring.substring(lagring.indexOf("x M.2")-2,lagring.indexOf("x M.2"));
+            String Mdot2 = lagring.substring(lagring.indexOf("x M.2") - 2, lagring.indexOf("x M.2"));
             System.out.println(Mdot2);
             return Integer.parseInt(Mdot2.trim());
         }
