@@ -118,7 +118,7 @@ public class KomplettSE extends Scraper {
             try {
                 cpu.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='product-price-now']", "price")));
             } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
             cpu.setDomain(getDomainName());
             try {
@@ -139,7 +139,6 @@ public class KomplettSE extends Scraper {
             try {
                 cpu.setBoostClock(getCpuSpeeds(findFieldFromSpecification("Max. turbohastighet")));
             } catch (Exception e) {
-                e.printStackTrace();
             }
             try {
                 cpu.setSocket(getCpuSocket(findFieldFromSpecification("Kompatibel processorsockel")));
@@ -151,10 +150,6 @@ public class KomplettSE extends Scraper {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            System.out.println(cpu.toString());
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -227,6 +222,34 @@ public class KomplettSE extends Scraper {
 
     @Override
     public RandomAccessMemory parseRAM(Product product) {
+        RandomAccessMemory ram =  new RandomAccessMemory();
+
+        Utils.waitTime((int) (Math.random() * 5000) + 1000);
+        getWebPage(product.getUrl());
+        ram.setUrl(product.getUrl());
+        try{
+            ram.setName(getText("//h1[@class='product-main-info-webtext1']/span","name"));
+        }catch (NoSuchElementException e){
+            System.out.println("Could'nt find name!");
+        }
+
+        try{
+            ram.setPrice(removeAllCharactersFromNumbers(getText("//div[@class='product-price ']/span[@class='product-price-now']","name")));
+        }catch (NoSuchElementException e){
+            System.out.println("Could'nt find price!");
+        }
+
+        try{
+            String DDR = findFieldFromSpecification("Teknik").split("\\s")[0];
+            ram.setDdr(DDR);
+        }catch (NoSuchElementException e){
+            System.out.println("Could'nt find DDR!");
+        }
+
+
+
+
+
         return null;
     }
 

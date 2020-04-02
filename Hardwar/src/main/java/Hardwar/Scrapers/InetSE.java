@@ -144,7 +144,8 @@ public class InetSE extends Scraper {
             motherBoard.setMdot2Size(findFieldFromSpecification("M.2 storlek plats 1"));
             System.out.println(motherBoard);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("deleted Product! with id: " + product.getId());
+            return null;
         }
         return motherBoard;
     }
@@ -202,7 +203,6 @@ public class InetSE extends Scraper {
             try {
                 ram.setPrice(removeAllCharactersFromNumbers(getText("//span[@class='campaign-price']", "reduced price")));
             } catch (Exception price2) {
-                price2.printStackTrace();
                 return null;
             }
         }

@@ -125,7 +125,6 @@ public abstract class Scraper implements WebExport {
         return string.replaceAll("\\W","");
     }
     public int removeAllCharactersFromNumbers(String numbers){
-        System.out.println(numbers);
         return Integer.parseInt(numbers.replaceAll("\\D",""));
     }
     public String cleanWeirdCharacters(String string){

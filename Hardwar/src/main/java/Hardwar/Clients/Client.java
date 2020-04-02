@@ -36,13 +36,13 @@ public class Client {
         this.apiHost = apiHost;
     }
 
-    public List<Product> getAllByDomainNameAndType(String domainName, String hardWareType, String endpoint) {
+    public List<Product> getAllByDomainNameAndParsed(String domainName, String endpoint) {
 
         client = HttpClients.createDefault();
         List<Product> allProductsByDomainNameAndType = new ArrayList<>();
 
         try {
-            get = new HttpGet(apiHost + "/" + endpoint + "/" + domainName + "/" + hardWareType);
+            get = new HttpGet(apiHost + "/" + endpoint + "/" + domainName + "/parsed");
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
             System.out.println("Executing " + get.getRequestLine());
@@ -70,36 +70,7 @@ public class Client {
         return allProductsByDomainNameAndType;
     }
 
-    public List<Product> getAllByDomainName(String domainName,String endpoint) {
 
-        client = HttpClients.createDefault();
-        List<Product> allProductsByDomain = new ArrayList<>();
-        try {
-            get = new HttpGet(apiHost + "/" + endpoint + "/" + domainName);
-            System.out.println("Executing " + get.getRequestLine());
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                @Override
-                public String handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
-                    int statusCode = httpResponse.getStatusLine().getStatusCode();
-                    if (statusCode >= 200 && statusCode < 300) {
-                        HttpEntity entity = httpResponse.getEntity();
-                         json = EntityUtils.toString(entity);
-                        return json;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + statusCode);
-                    }
-                }
-            };
-
-            String response = client.execute(get, responseHandler);
-            Product[] productList = gson.fromJson(response, Product[].class);
-            allProductsByDomain = Arrays.asList(productList);
-
-        } catch (Exception e) {
-            System.out.println("error");
-        }
-        return allProductsByDomain;
-    }
 
 
     public List<Product> getAllNullAndDomain(String domainName,String endpoint) {
@@ -153,6 +124,28 @@ public class Client {
             System.out.println(entity);
             post.setEntity(entity);
             response = client.execute(post);
+            int statusCode = response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            System.out.println("Error in the post request!");
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+    public List<Product> updateProducts(List<Product> product,String endpoint) {
+
+        try {
+            client = HttpClients.createDefault();
+            put = new HttpPut(apiHost + "/" + endpoint);
+            put.addHeader("Content-Type", "application/json");
+            put.addHeader("Accept", "application/json;charset=UTF-8");
+            System.out.println("Executing " + put.getRequestLine());
+            json = gson.toJson(product.toArray(), Product[].class);
+            entity = new StringEntity(json,"UTF-8");
+            entity.setContentEncoding("UTF-8");
+            System.out.println(entity);
+            put.setEntity(entity);
+            response = client.execute(put);
             int statusCode = response.getStatusLine().getStatusCode();
         } catch (Exception e) {
             System.out.println("Error in the post request!");
@@ -371,6 +364,7 @@ public class Client {
         try {
             client = HttpClients.createDefault();
             get = new HttpGet(apiHost + endpoint + "/delete/" + component.getId());
+            System.out.println(get.getRequestLine());
             get.addHeader("Content-Type", "application/json");
             get.addHeader("Accept", "application/json;charset=UTF-8");
             client.execute(get);

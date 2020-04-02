@@ -5,7 +5,6 @@ import Hardwar.Utils.Utils;
 import Hardwar.Utils.WebExport;
 import com.Hardwar.Persistence.Entitys.*;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ public class Runner {
     private String domainName;
     private String apiHost;
     private Client client;
-    private String typeOfHardWare;
     private final int parseAmount = 5;
     private final String GRAPHICSCARD_ENDPOINT = "/graphicscard";
     private final String PRODUCTS_ENDPOINT = "/product";
@@ -26,12 +24,11 @@ public class Runner {
     private final String STORAGE_ENDPOINT = "/storage";
 
 
-    public Runner(String method, String domainName, String apiHost, Client client, String typeOfHardWare) {
+    public Runner(String method, String domainName, String apiHost, Client client ) {
         this.domainName = domainName;
         this.method = method;
         this.apiHost = apiHost;
         this.client = client;
-        this.typeOfHardWare = typeOfHardWare;
     }
 
     public static void main(String[] args) {
@@ -39,10 +36,9 @@ public class Runner {
         String method = args[1];
         String domainName = args[2];
         String apiHost = args[3];
-        String typeOfHardWare = args[4];
         System.setProperty("webdriver.chrome.driver", chromeDriver);
         Client client = new Client(apiHost);
-        Runner runner = new Runner(method, domainName, apiHost, client, typeOfHardWare);
+        Runner runner = new Runner(method, domainName, apiHost, client);
         runner.run();
     }
 
@@ -55,160 +51,160 @@ public class Runner {
             }
         } else if ("parse".equals(method)) {
             System.out.println("Parse method is called on domain: " + domainName);
-            List<Product> products = client.getAllByDomainNameAndType(domainName, typeOfHardWare, PRODUCTS_ENDPOINT);
+            List<Product> products = client.getAllByDomainNameAndParsed(domainName, PRODUCTS_ENDPOINT);
             List<Product> parsedProducts = new ArrayList<>();
             if (webExport != null) {
-                switch (typeOfHardWare) {
-                    case "grafikkort":
-                        List<GraphicsCard> parsedGraphicsCards = new ArrayList<>();
-                        for (Product graphicscard : products) {
-                            if (parsedGraphicsCards.size() >= parseAmount) {
-                                client.updateComponents(parsedGraphicsCards, GRAPHICSCARD_ENDPOINT);
-                                parsedGraphicsCards.removeAll(parsedGraphicsCards);
-                            }
-                            GraphicsCard gpu = webExport.parseGraphicsCard(graphicscard);
-                            if (gpu != null) {
-                                graphicscard.setParsed(true);
-                                parsedProducts.add(graphicscard);
-                                parsedGraphicsCards.add(gpu);
-                                System.out.println(parsedGraphicsCards.size() + "/5 parsed!");
-                            } else {
-                                client.deleteProduct(graphicscard, PRODUCTS_ENDPOINT);
-                            }
-                        }
-                        client.updateComponents(parsedGraphicsCards, GRAPHICSCARD_ENDPOINT);
-                        break;
-                    case "processor":
-                        List<CentralProcessingUnit> parsedCPUs = new ArrayList<>();
-                        for (Product processor : products) {
-                            if (parsedCPUs.size() >= parseAmount) {
-                                client.updateComponents(parsedCPUs, CPU_ENDPOINT);
-                                parsedCPUs.removeAll(parsedCPUs);
-                            }
-                            CentralProcessingUnit cpu = webExport.parseCPU(processor);
-                            if (cpu != null) {
-                                processor.setParsed(true);
-                                parsedProducts.add(processor);
-                                parsedCPUs.add(cpu);
-                                System.out.println(parsedCPUs.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(processor, PRODUCTS_ENDPOINT);
-                            }
-                        }
-                        client.updateComponents(parsedCPUs, CPU_ENDPOINT);
-                        break;
-                    case "chassi":
-                        List<Chassi> parsedChassis = new ArrayList<>();
-                        for (Product chassi : products) {
-                            if (parsedChassis.size() >= parseAmount) {
-                                client.updateComponents(parsedChassis, CHASSI_ENDPOINT);
-                                parsedChassis.removeAll(parsedChassis);
-                            }
-                            Chassi parsedChassi = webExport.parseChassi(chassi);
-                            if (parsedChassi != null) {
-                                chassi.setParsed(true);
-                                parsedProducts.add(chassi);
-                                parsedChassis.add(parsedChassi);
-                                System.out.println(parsedChassis.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(chassi, PRODUCTS_ENDPOINT);
-                            }
+                List<GraphicsCard> parsedGraphicsCards = new ArrayList<>();
+                List<RandomAccessMemory> parsedRAM = new ArrayList<>();
+                List<PowerSupplyUnit> parsedPSU = new ArrayList<>();
+                List<CentralProcessingUnit> parsedCPUs = new ArrayList<>();
+                List<Chassi> parsedChassis = new ArrayList<>();
+                List<Storage> parsedStorage = new ArrayList<>();
+                List<MotherBoard> parsedMotherBoards = new ArrayList<>();
+                for (Product product : products) {
 
+                    if (product.getTypeOfHardWare().toLowerCase().contains("grafikkort")) {
+                        if (parsedGraphicsCards.size() >= parseAmount) {
+                            client.updateComponents(parsedGraphicsCards, GRAPHICSCARD_ENDPOINT);
+                            parsedGraphicsCards.removeAll(parsedGraphicsCards);
                         }
-                        client.updateComponents(parsedChassis, CHASSI_ENDPOINT);
-                        break;
-                    case "disk":
-                        List<Storage> parsedStorage = new ArrayList<>();
-                        for (Product storage : products) {
-                            if (parsedStorage.size() >= parseAmount) {
-                                client.updateComponents(parsedStorage, STORAGE_ENDPOINT);
-                                parsedStorage.removeAll(parsedStorage);
-                            }
-                            Storage parsedStorageDevice = webExport.parseStorage(storage);
-                            if (parsedStorageDevice != null) {
-                                storage.setParsed(true);
-                                parsedProducts.add(storage);
-                                parsedStorage.add(parsedStorageDevice);
-                                System.out.println(parsedStorage.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(storage, PRODUCTS_ENDPOINT);
-                            }
+                        GraphicsCard gpu = webExport.parseGraphicsCard(product);
+                        if (gpu != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedGraphicsCards.add(gpu);
+                            System.out.println(parsedGraphicsCards.size() + "/" + parseAmount + " gpu's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
                         }
-                        client.updateComponents(parsedStorage, STORAGE_ENDPOINT);
-                        break;
-                    case "minne":
-                        List<RandomAccessMemory> parsedRAM = new ArrayList<>();
-                        for (Product RAM : products) {
-                            if (parsedRAM.size() >= parseAmount) {
-                                client.updateComponents(parsedRAM, RAM_ENDPOINT);
-                                parsedRAM.removeAll(parsedRAM);
-                            }
-                            RandomAccessMemory randomAccessMemory = webExport.parseRAM(RAM);
-                            if (randomAccessMemory != null) {
-                                RAM.setParsed(true);
-                                parsedProducts.add(RAM);
-                                parsedRAM.add(randomAccessMemory);
-                                System.out.println(parsedRAM.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(RAM, PRODUCTS_ENDPOINT);
-                            }
-                        }
-                        client.updateComponents(parsedRAM, RAM_ENDPOINT);
-                        break;
-                    case "psu":
-                        List<PowerSupplyUnit> parsedPSU = new ArrayList<>();
-                        for (Product PSU : products) {
-                            if (parsedPSU.size() >= parseAmount) {
-                                client.updateComponents(parsedPSU, PSU_ENDPOINT);
-                                parsedPSU.removeAll(parsedPSU);
-                            }
-                            PowerSupplyUnit powerSupplyUnit = webExport.parsePSU(PSU);
-                            if (powerSupplyUnit != null) {
-                                PSU.setParsed(true);
-                                parsedProducts.add(PSU);
-                                parsedPSU.add(powerSupplyUnit);
-                                System.out.println(parsedPSU.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(PSU, PRODUCTS_ENDPOINT);
-                            }
-                        }
-                        client.updateComponents(parsedPSU, PSU_ENDPOINT);
-                        break;
-                    case "moderkort":
-                        List<MotherBoard> parsedMotherBoards = new ArrayList<>();
-                        for (Product motherBoard : products) {
-                            if (parsedMotherBoards.size() >= parseAmount) {
-                                client.updateComponents(parsedMotherBoards, MOTHERBOARD_ENDPOINT);
-                                parsedMotherBoards.removeAll(parsedMotherBoards);
-                            }
-                            MotherBoard parsedMotherboard = webExport.parseMotherBoard(motherBoard);
-                            if (parsedMotherboard != null) {
-                                motherBoard.setParsed(true);
-                                parsedProducts.add(motherBoard);
-                                parsedMotherBoards.add(parsedMotherboard);
-                                System.out.println(parsedMotherBoards.size() + "/" + parseAmount + " parsed!");
-                            } else {
-                                client.deleteProduct(motherBoard, PRODUCTS_ENDPOINT);
-                            }
-                        }
-                        client.updateComponents(parsedMotherBoards, MOTHERBOARD_ENDPOINT);
-                        break;
 
+
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("processor")) {
+
+                        if (parsedCPUs.size() >= parseAmount) {
+                            client.updateComponents(parsedCPUs, CPU_ENDPOINT);
+                            parsedCPUs.removeAll(parsedCPUs);
+                        }
+                        CentralProcessingUnit cpu = webExport.parseCPU(product);
+                        if (cpu != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedCPUs.add(cpu);
+                            System.out.println(parsedCPUs.size() + "/" + parseAmount + " cpu's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("chassi")) {
+                        if (parsedChassis.size() >= parseAmount) {
+                            client.updateComponents(parsedChassis, CHASSI_ENDPOINT);
+                            parsedChassis.removeAll(parsedChassis);
+                        }
+                        Chassi parsedChassi = webExport.parseChassi(product);
+                        if (parsedChassi != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedChassis.add(parsedChassi);
+                            System.out.println(parsedChassis.size() + "/" + parseAmount + " chassi's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("disk")) {
+
+
+                        if (parsedStorage.size() >= parseAmount) {
+                            client.updateComponents(parsedStorage, STORAGE_ENDPOINT);
+                            parsedStorage.removeAll(parsedStorage);
+                        }
+                        Storage parsedStorageDevice = webExport.parseStorage(product);
+                        if (parsedStorageDevice != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedStorage.add(parsedStorageDevice);
+                            System.out.println(parsedStorage.size() + "/" + parseAmount + " storage's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("minne")) {
+
+
+                        if (parsedRAM.size() >= parseAmount) {
+                            client.updateComponents(parsedRAM, RAM_ENDPOINT);
+                            parsedRAM.removeAll(parsedRAM);
+                        }
+                        RandomAccessMemory randomAccessMemory = webExport.parseRAM(product);
+                        if (randomAccessMemory != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedRAM.add(randomAccessMemory);
+                            System.out.println(parsedRAM.size() + "/" + parseAmount + " ram parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("psu")||product.getTypeOfHardWare().toLowerCase().contains("nätagg")) {
+
+                        if (parsedPSU.size() >= parseAmount) {
+                            client.updateComponents(parsedPSU, PSU_ENDPOINT);
+                            parsedPSU.removeAll(parsedPSU);
+                        }
+                        PowerSupplyUnit powerSupplyUnit = webExport.parsePSU(product);
+                        if (powerSupplyUnit != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedPSU.add(powerSupplyUnit);
+                            System.out.println(parsedPSU.size() + "/" + parseAmount + " psu's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+
+                    } else if (product.getTypeOfHardWare().toLowerCase().contains("moderkort")) {
+
+
+                        if (parsedMotherBoards.size() >= parseAmount) {
+                            client.updateComponents(parsedMotherBoards, MOTHERBOARD_ENDPOINT);
+                            parsedMotherBoards.removeAll(parsedMotherBoards);
+                        }
+                        MotherBoard parsedMotherboard = webExport.parseMotherBoard(product);
+                        if (parsedMotherboard != null) {
+                            product.setParsed(true);
+                            parsedProducts.add(product);
+                            parsedMotherBoards.add(parsedMotherboard);
+                            System.out.println(parsedMotherBoards.size() + "/" + parseAmount + " motherboard's parsed!");
+                        } else {
+                            client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                        }
+
+                    }else {
+                        client.deleteProduct(product, PRODUCTS_ENDPOINT);
+                    }
+                    if (parsedProducts.size()>=parseAmount){
+                        client.updateProducts(parsedProducts,PRODUCTS_ENDPOINT);
+                        parsedProducts.removeAll(parsedProducts);
+                        System.out.println("5 Products parsed!");
+                    }
                 }
-                client.saveProducts(parsedProducts,PRODUCTS_ENDPOINT);
+                client.updateComponents(parsedChassis, CHASSI_ENDPOINT);
+                client.updateComponents(parsedGraphicsCards, GRAPHICSCARD_ENDPOINT);
+                client.updateComponents(parsedCPUs, CPU_ENDPOINT);
+                client.updateComponents(parsedStorage, STORAGE_ENDPOINT);
+                client.updateComponents(parsedRAM, RAM_ENDPOINT);
+                client.updateComponents(parsedPSU, PSU_ENDPOINT);
+                client.updateComponents(parsedMotherBoards, MOTHERBOARD_ENDPOINT);
             }
+            client.updateProducts(parsedProducts, PRODUCTS_ENDPOINT);
         } else if ("type".equals(method)) {
-            List<Product> allProductByDomain = client.getAllNullAndDomain(domainName, PRODUCTS_ENDPOINT);
-            List<Product> parsedProducts = new ArrayList<>();
-            for (Product product : allProductByDomain) {
-                if (parsedProducts.size() >= 5) {
-                    client.updateProductTypes(parsedProducts, PRODUCTS_ENDPOINT);
-                    parsedProducts.removeAll(parsedProducts);
+                List<Product> allProductByDomain = client.getAllNullAndDomain(domainName, PRODUCTS_ENDPOINT);
+                List<Product> parsedProducts = new ArrayList<>();
+                for (Product product : allProductByDomain) {
+                    if (parsedProducts.size() >= 5) {
+                        client.updateProductTypes(parsedProducts, PRODUCTS_ENDPOINT);
+                        parsedProducts.removeAll(parsedProducts);
+                    }
+                    parsedProducts.add(webExport.parseType(product));
+                    System.out.println(parsedProducts.size() + "/5 parsed");
                 }
-                parsedProducts.add(webExport.parseType(product));
-                System.out.println(parsedProducts.size() + "/5 parsed");
-            }
-            client.updateProductTypes(parsedProducts, PRODUCTS_ENDPOINT);
+                client.updateProductTypes(parsedProducts, PRODUCTS_ENDPOINT);
+
         } else if ("update".equals(method)) {
             List<? extends ComputerComponent> components = client.getAllComponentsByDomainName(domainName);
             System.out.println("Update is Called on domain: " + domainName);
